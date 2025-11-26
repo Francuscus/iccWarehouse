@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Warehouse & Template Builder - Paco's Teaching Resources</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1600px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        /* Sidebar navigation */
+        .sidebar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        .sidebar h2 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .subject-list {
+            list-style: none;
+        }
+
+        .subject-item {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subject-item:hover {
+            background: #f1f5f9;
+        }
+
+        .subject-item.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .subject-count {
+            font-size: 0.85rem;
+            background: rgba(0,0,0,0.1);
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+        }
+
+        /* Main content area */
+        .main-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            font-weight: 500;
+            color: #64748b;
+        }
+
+        .tab:hover {
+            color: #667eea;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        /* Tab content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Template Builder */
+        .template-builder {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .builder-panel {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        .builder-panel h3 {
+            margin-bottom: 1.5rem;
+            color: #667eea;
+            font-size: 1.3rem;
+        }
+
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #475569;
+        }
+
+        .control-group input[type="color"],
+        .control-group input[type="number"],
+        .control-group input[type="text"],
+        .control-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .control-group input[type="color"] {
+            height: 50px;
+            cursor: pointer;
+        }
+
+        .color-preview {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .color-swatch {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            border: 2px solid #e2e8f0;
+        }
+
+        /* Preview panel */
+        .preview-panel {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .preview-header {
+            padding: 1rem;
+            background: var(--primary-color, #667eea);
+            color: white;
+        }
+
+        .preview-content {
+            padding: 2rem;
+        }
+
+        /* Content list */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .content-card {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .content-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        .content-card h3 {
+            color: #1e293b;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .content-meta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .meta-badge {
+            background: #e0e7ff;
+            color: #667eea;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Search */
+        .search-box {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+
+        /* Presets */
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .preset-card {
+            padding: 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .preset-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .preset-ocean {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .preset-forest {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+        }
+
+        .preset-sunset {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+        }
+
+        .preset-midnight {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+        }
+
+        /* Export section */
+        .export-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .export-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .export-card h4 {
+            margin-bottom: 0.75rem;
+            color: #1e293b;
+        }
+
+        .export-card p {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+
+            .template-builder {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>ðŸ“š Content Warehouse & Template Builder</h1>
+        <p>Your complete teaching resource system - 156 pages organized by subject with customizable templates</p>
+    </header>
+
+    <!-- Main container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>ðŸ“‚ Subject Categories</h2>
+            <ul class="subject-list" id="subjectList">
+                <!-- Populated by JavaScript -->
+            </ul>
+        </aside>
+
+        <!-- Main content -->
+        <main class="main-content">
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('warehouse')">ðŸ›ï¸ Content Warehouse</div>
+                <div class="tab" onclick="switchTab('builder')">ðŸŽ¨ Template Builder</div>
+                <div class="tab" onclick="switchTab('create')">âž• Create Page</div>
+                <div class="tab" onclick="switchTab('export')">ðŸ“¦ Export</div>
+            </div>
+
+            <!-- Warehouse Tab -->
+            <div id="warehouse" class="tab-content active">
+                <div class="search-box">
+                    <span class="search-icon">ðŸ”</span>
+                    <input type="text" id="searchInput" placeholder="Search pages by title, topic, or keyword...">
+                </div>
+                
+                <h2 style="margin-bottom: 1rem;">Browse Content by Subject</h2>
+                <p style="color: #64748b; margin-bottom: 2rem;">Select a subject category from the sidebar to view all related pages</p>
+                
+                <div class="content-grid" id="contentGrid">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Builder Tab -->
+            <div id="builder" class="tab-content">
+                <h2 style="margin-bottom: 1.5rem;">ðŸŽ¨ Visual Template Builder</h2>
+                <p style="color: #64748b; margin-bottom: 2rem;">Design your template just like WordPress Customizer - changes update in real-time!</p>
+
+                <!-- Presets -->
+                <h3 style="margin-bottom: 1rem;">Quick Start Presets</h3>
+                <div class="preset-grid">
+                    <div class="preset-card preset-ocean" onclick="applyPreset('ocean')">
+                        <strong>Ocean Blue</strong>
+                        <p style="margin-top: 0.5rem; opacity: 0.9;">Purple & Blue gradient</p>
+                    </div>
+                    <div class="preset-card preset-forest" onclick="applyPreset('forest')">
+                        <strong>Forest Green</strong>
+                        <p style="margin-top: 0.5rem; opacity: 0.9;">Teal & Green</p>
+                    </div>
+                    <div class="preset-card preset-sunset" onclick="applyPreset('sunset')">
+                        <strong>Sunset Pink</strong>
+                        <p style="margin-top: 0.5rem; opacity: 0.9;">Pink & Red</p>
+                    </div>
+                    <div class="preset-card preset-midnight" onclick="applyPreset('midnight')">
+                        <strong>Midnight Blue</strong>
+                        <p style="margin-top: 0.5rem; opacity: 0.9;">Dark & Blue</p>
+                    </div>
+                </div>
+
+                <div class="template-builder">
+                    <!-- Controls -->
+                    <div class="builder-panel">
+                        <h3>ðŸŽ›ï¸ Customize Your Template</h3>
+
+                        <div class="control-group">
+                            <label>Primary Color</label>
+                            <input type="color" id="primaryColor" value="#667eea" onchange="updatePreview()">
+                        </div>
+
+                        <div class="control-group">
+                            <label>Secondary Color</label>
+                            <input type="color" id="secondaryColor" value="#764ba2" onchange="updatePreview()">
+                        </div>
+
+                        <div class="control-group">
+                            <label>Background Color</label>
+                            <input type="color" id="bgColor" value="#f5f7fa" onchange="updatePreview()">
+                        </div>
+
+                        <div class="control-group">
+                            <label>Text Color</label>
+                            <input type="color" id="textColor" value="#333333" onchange="updatePreview()">
+                        </div>
+
+                        <div class="control-group">
+                            <label>Heading Font</label>
+                            <select id="headingFont" onchange="updatePreview()">
+                                <option value="Montserrat">Montserrat</option>
+                                <option value="Inter">Inter</option>
+                                <option value="Roboto">Roboto</option>
+                                <option value="Playfair Display">Playfair Display</option>
+                                <option value="Poppins">Poppins</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label>Body Font</label>
+                            <select id="bodyFont" onchange="updatePreview()">
+                                <option value="Open Sans">Open Sans</option>
+                                <option value="Inter">Inter</option>
+                                <option value="Roboto">Roboto</option>
+                                <option value="Lato">Lato</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label>Content Width (px)</label>
+                            <input type="number" id="contentWidth" value="1400" min="800" max="2000" step="50" onchange="updatePreview()">
+                        </div>
+
+                        <div class="control-group">
+                            <label>Border Radius (px)</label>
+                            <input type="number" id="borderRadius" value="8" min="0" max="20" onchange="updatePreview()">
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="saveTemplate()">ðŸ’¾ Save Template</button>
+                            <button class="btn btn-secondary" onclick="resetTemplate()">ðŸ”„ Reset</button>
+                        </div>
+                    </div>
+
+                    <!-- Preview -->
+                    <div class="builder-panel">
+                        <h3>ðŸ‘ï¸ Live Preview</h3>
+                        <div class="preview-panel" id="preview">
+                            <div class="preview-header" id="previewHeader">
+                                <h2>Lesson Title Here</h2>
+                                <p>Week 5 â€¢ Monday, March 15</p>
+                            </div>
+                            <div class="preview-content" id="previewContent">
+                                <h3>Learning Objectives</h3>
+                                <p>This is how your content will look with the selected styles. The preview updates in real-time as you make changes.</p>
+                                <p style="margin-top: 1rem;">You can see how headings, paragraphs, and other elements will appear.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Tab -->
+            <div id="create" class="tab-content">
+                <h2 style="margin-bottom: 1.5rem;">âž• Create New Page</h2>
+                <p style="color: #64748b; margin-bottom: 2rem;">Build a new lesson page using your custom template and warehouse content</p>
+                
+                <div style="background: #f8fafc; padding: 2rem; border-radius: 8px;">
+                    <p style="text-align: center; color: #64748b;">
+                        ðŸš§ Page creator coming in next version!<br>
+                        You'll be able to drag-and-drop content from your warehouse into your template.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Export Tab -->
+            <div id="export" class="tab-content">
+                <h2 style="margin-bottom: 1.5rem;">ðŸ“¦ Export Your Site</h2>
+                <p style="color: #64748b; margin-bottom: 2rem;">Generate your complete website with your custom template applied to all pages</p>
+
+                <div class="export-options">
+                    <div class="export-card">
+                        <h4>ðŸš€ Deploy to Hugging Face</h4>
+                        <p>Upload your warehouse and template to Hugging Face Spaces for free hosting</p>
+                        <button class="btn btn-primary">Export for Hugging Face</button>
+                    </div>
+
+                    <div class="export-card">
+                        <h4>ðŸ“ Deploy to GitHub Pages</h4>
+                        <p>Use GitHub Pages with Jekyll for dynamic content management</p>
+                        <button class="btn btn-primary">Export for GitHub</button>
+                    </div>
+
+                    <div class="export-card">
+                        <h4>ðŸ’¾ Download HTML Files</h4>
+                        <p>Get a complete static site with all pages generated from your template</p>
+                        <button class="btn btn-primary">Download ZIP</button>
+                    </div>
+
+                    <div class="export-card">
+                        <h4>ðŸ“‹ Export Template Code</h4>
+                        <p>Copy the CSS and HTML for your custom template</p>
+                        <button class="btn btn-secondary">Copy Code</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Subject data
+        const subjects = [
+            { id: 'cultural-dimensions', name: 'Cultural Dimensions', count: 46, icon: 'ðŸŒ' },
+            { id: 'communication-tools', name: 'Communication Tools', count: 94, icon: 'ðŸ’¬' },
+            { id: 'cultural-identity', name: 'Cultural Identity', count: 2, icon: 'ðŸªž' },
+            { id: 'media-analysis', name: 'Media & Film', count: 29, icon: 'ðŸŽ¬' },
+            { id: 'anchors-culture', name: 'Anchors of Culture', count: 35, icon: 'âš“' },
+            { id: 'subculture', name: 'Subculture', count: 21, icon: 'ðŸ˜ï¸' },
+            { id: 'intercultural-skills', name: 'Intercultural Skills', count: 45, icon: 'ðŸ¤' },
+            { id: 'social-change', name: 'Social Change', count: 8, icon: 'âœŠ' },
+            { id: 'sojourners', name: 'Sojourners', count: 32, icon: 'âœˆï¸' },
+            { id: 'course-structure', name: 'Course Structure', count: 123, icon: 'ðŸ“š' },
+            { id: 'democratic-classroom', name: 'Democratic Classroom', count: 95, icon: 'ðŸ›ï¸' }
+        ];
+
+        // Populate sidebar
+        const subjectList = document.getElementById('subjectList');
+        subjects.forEach(subject => {
+            const li = document.createElement('li');
+            li.className = 'subject-item';
+            li.innerHTML = `
+                <span>${subject.icon} ${subject.name}</span>
+                <span class="subject-count">${subject.count}</span>
+            `;
+            li.onclick = () => loadSubject(subject.id);
+            subjectList.appendChild(li);
+        });
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Load subject content
+        function loadSubject(subjectId) {
+            // Highlight active subject
+            document.querySelectorAll('.subject-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.subject-item').classList.add('active');
+
+            // This would load actual content from JSON files
+            console.log('Loading subject:', subjectId);
+            // In real implementation, fetch from subject_*.json files
+        }
+
+        // Template builder functions
+        function updatePreview() {
+            const primary = document.getElementById('primaryColor').value;
+            const secondary = document.getElementById('secondaryColor').value;
+            const bg = document.getElementById('bgColor').value;
+            const text = document.getElementById('textColor').value;
+            const headingFont = document.getElementById('headingFont').value;
+            const bodyFont = document.getElementById('bodyFont').value;
+            const width = document.getElementById('contentWidth').value;
+            const radius = document.getElementById('borderRadius').value;
+
+            const header = document.getElementById('previewHeader');
+            const content = document.getElementById('previewContent');
+
+            header.style.background = `linear-gradient(135deg, ${primary}, ${secondary})`;
+            content.style.background = bg;
+            content.style.color = text;
+            content.style.fontFamily = bodyFont;
+            content.querySelector('h3').style.fontFamily = headingFont;
+        }
+
+        function applyPreset(preset) {
+            const presets = {
+                ocean: { primary: '#667eea', secondary: '#764ba2' },
+                forest: { primary: '#11998e', secondary: '#38ef7d' },
+                sunset: { primary: '#f093fb', secondary: '#f5576c' },
+                midnight: { primary: '#2c3e50', secondary: '#3498db' }
+            };
+
+            const selected = presets[preset];
+            document.getElementById('primaryColor').value = selected.primary;
+            document.getElementById('secondaryColor').value = selected.secondary;
+            updatePreview();
+        }
+
+        function saveTemplate() {
+            const template = {
+                primaryColor: document.getElementById('primaryColor').value,
+                secondaryColor: document.getElementById('secondaryColor').value,
+                bgColor: document.getElementById('bgColor').value,
+                textColor: document.getElementById('textColor').value,
+                headingFont: document.getElementById('headingFont').value,
+                bodyFont: document.getElementById('bodyFont').value,
+                contentWidth: document.getElementById('contentWidth').value,
+                borderRadius: document.getElementById('borderRadius').value
+            };
+
+            localStorage.setItem('customTemplate', JSON.stringify(template));
+            alert('âœ… Template saved! You can now export your site with these settings.');
+        }
+
+        function resetTemplate() {
+            document.getElementById('primaryColor').value = '#667eea';
+            document.getElementById('secondaryColor').value = '#764ba2';
+            document.getElementById('bgColor').value = '#f5f7fa';
+            document.getElementById('textColor').value = '#333333';
+            document.getElementById('headingFont').value = 'Montserrat';
+            document.getElementById('bodyFont').value = 'Open Sans';
+            document.getElementById('contentWidth').value = '1400';
+            document.getElementById('borderRadius').value = '8';
+            updatePreview();
+        }
+
+        // Initialize
+        updatePreview();
+    </script>
+</body>
+</html>

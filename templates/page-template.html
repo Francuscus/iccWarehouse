@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{TITLE}} | Intercultural Communication</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family={{HEADING_FONT}}:wght@400;700&family={{BODY_FONT}}:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: '{{BODY_FONT}}', sans-serif;
+            line-height: 1.7;
+            color: {{TEXT_COLOR}};
+            background: {{BG_COLOR}};
+        }
+        
+        /* Header with gradient */
+        .page-header {
+            background: linear-gradient(135deg, {{PRIMARY_COLOR}}, {{SECONDARY_COLOR}});
+            color: white;
+            padding: 3rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: {{CONTENT_WIDTH}}px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .page-header h1 {
+            font-family: '{{HEADING_FONT}}', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-meta {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            opacity: 0.9;
+            flex-wrap: wrap;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Main content */
+        main {
+            max-width: {{CONTENT_WIDTH}}px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .back-link {
+            display: inline-block;
+            color: {{PRIMARY_COLOR}};
+            text-decoration: none;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+        
+        .back-link:before {
+            content: "← ";
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .content-section {
+            background: white;
+            padding: 2.5rem;
+            border-radius: {{BORDER_RADIUS}}px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+        
+        h2 {
+            font-family: '{{HEADING_FONT}}', sans-serif;
+            color: {{PRIMARY_COLOR}};
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem 0;
+        }
+        
+        h3 {
+            font-family: '{{HEADING_FONT}}', sans-serif;
+            color: {{PRIMARY_COLOR}};
+            font-size: 1.4rem;
+            margin: 1.5rem 0 1rem 0;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Embeds */
+        .embed-container {
+            position: relative;
+            margin: 2rem 0;
+            border-radius: {{BORDER_RADIUS}}px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .youtube-container,
+        .vimeo-container {
+            padding-bottom: 56.25%;
+            height: 0;
+            position: relative;
+        }
+        
+        .youtube-container iframe,
+        .vimeo-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .google-forms-container iframe {
+            width: 100%;
+            height: 800px;
+            border: none;
+        }
+        
+        .google-slides-container iframe {
+            width: 100%;
+            height: 569px;
+            border: none;
+        }
+        
+        .google-docs-container iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+        
+        .soundcloud-container iframe {
+            width: 100%;
+            height: 166px;
+            border: none;
+        }
+        
+        /* Subject tag */
+        .subject-tag {
+            display: inline-block;
+            background: {{PRIMARY_COLOR}};
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Key terms */
+        .key-terms {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: {{BORDER_RADIUS}}px;
+            margin: 2rem 0;
+        }
+        
+        .key-terms h3 {
+            margin-top: 0;
+        }
+        
+        .term-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .term-tag {
+            background: white;
+            border: 2px solid {{PRIMARY_COLOR}};
+            color: {{PRIMARY_COLOR}};
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .page-header {
+                padding: 2rem 0;
+            }
+            
+            .content-section {
+                padding: 1.5rem;
+            }
+            
+            .page-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="header-content">
+            <div class="subject-tag">{{SUBJECT}}</div>
+            <h1>{{TITLE}}</h1>
+            <div class="page-meta">
+                {{META_ITEMS}}
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <a href="../index.html" class="back-link">Back to Warehouse</a>
+
+        <!-- Main Content -->
+        <div class="content-section">
+            {{CONTENT}}
+        </div>
+
+        <!-- Key Terms -->
+        {{KEY_TERMS_SECTION}}
+    </main>
+</body>
+</html>
